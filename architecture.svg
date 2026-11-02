@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 700" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#37474f"/>
+    </marker>
+  </defs>
+  <rect width="960" height="700" fill="#ffffff"/>
+  <text x="480" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#232f3e">Secure Web Application Architecture on AWS (Terraform)</text>
+
+  <!-- Internet -->
+  <rect x="400" y="48" width="160" height="36" rx="18" fill="#eceff1" stroke="#607d8b"/>
+  <text x="480" y="71" text-anchor="middle" font-size="14">Internet Users</text>
+  <line x1="480" y1="84" x2="480" y2="112" stroke="#37474f" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- VPC -->
+  <rect x="20" y="104" width="920" height="580" rx="10" fill="none" stroke="#8c4fff" stroke-width="2"/>
+  <text x="34" y="124" font-size="13" font-weight="bold" fill="#8c4fff">VPC 10.0.0.0/16</text>
+
+  <!-- IGW -->
+  <rect x="425" y="112" width="110" height="28" rx="4" fill="#fff3e0" stroke="#ef6c00"/>
+  <text x="480" y="131" text-anchor="middle" font-size="12">Internet Gateway</text>
+  <line x1="480" y1="140" x2="480" y2="172" stroke="#37474f" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Public subnets -->
+  <rect x="40" y="152" width="880" height="140" rx="8" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="52" y="172" font-size="12" font-weight="bold" fill="#2e7d32">Public subnets (10.0.1.0/24 AZ-a, 10.0.2.0/24 AZ-b)</text>
+  <rect x="330" y="180" width="300" height="50" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="2"/>
+  <text x="480" y="203" text-anchor="middle" font-size="14" font-weight="bold">Application Load Balancer</text>
+  <text x="480" y="220" text-anchor="middle" font-size="11" fill="#455a64">SG: HTTP 80 from 0.0.0.0/0</text>
+  <rect x="700" y="190" width="190" height="50" rx="6" fill="#ffffff" stroke="#2e7d32"/>
+  <text x="795" y="212" text-anchor="middle" font-size="13" font-weight="bold">NAT Gateway + EIP</text>
+  <text x="795" y="229" text-anchor="middle" font-size="11" fill="#455a64">outbound-only for app tier</text>
+
+  <!-- ALB -> App -->
+  <line x1="480" y1="230" x2="480" y2="338" stroke="#37474f" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="490" y="290" font-size="11" fill="#37474f">HTTP 80 (SG to SG)</text>
+
+  <!-- App subnets -->
+  <rect x="40" y="310" width="880" height="140" rx="8" fill="#e3f2fd" stroke="#1565c0"/>
+  <text x="52" y="330" font-size="12" font-weight="bold" fill="#1565c0">Private app subnets (10.0.11.0/24 AZ-a, 10.0.12.0/24 AZ-b)</text>
+  <rect x="330" y="340" width="300" height="60" rx="6" fill="#ffffff" stroke="#1565c0" stroke-width="2"/>
+  <text x="480" y="365" text-anchor="middle" font-size="14" font-weight="bold">EC2 Application Server</text>
+  <text x="480" y="384" text-anchor="middle" font-size="11" fill="#455a64">No public IP · IMDSv2 · SSM access · SG: 80 from ALB SG</text>
+
+  <!-- App -> NAT -->
+  <path d="M630,370 L795,370 L795,240" fill="none" stroke="#37474f" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arr)"/>
+  <text x="640" y="362" font-size="11" fill="#37474f">updates via NAT</text>
+
+  <!-- App -> DB -->
+  <line x1="480" y1="400" x2="480" y2="498" stroke="#37474f" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="490" y="455" font-size="11" fill="#37474f">MySQL 3306 (SG to SG)</text>
+
+  <!-- DB subnets -->
+  <rect x="40" y="470" width="880" height="130" rx="8" fill="#fce4ec" stroke="#c2185b"/>
+  <text x="52" y="490" font-size="12" font-weight="bold" fill="#c2185b">Private DB subnets (10.0.21.0/24 AZ-a, 10.0.22.0/24 AZ-b) · no internet route</text>
+  <rect x="330" y="500" width="300" height="60" rx="6" fill="#ffffff" stroke="#c2185b" stroke-width="2"/>
+  <text x="480" y="525" text-anchor="middle" font-size="14" font-weight="bold">Amazon RDS MySQL</text>
+  <text x="480" y="544" text-anchor="middle" font-size="11" fill="#455a64">publicly_accessible = false · encrypted · SG: 3306 from App SG</text>
+
+  <!-- Monitoring -->
+  <rect x="40" y="612" width="880" height="60" rx="8" fill="#fffde7" stroke="#f9a825"/>
+  <text x="52" y="630" font-size="12" font-weight="bold" fill="#f57f17">Security monitoring</text>
+  <rect x="200" y="636" width="260" height="28" rx="4" fill="#ffffff" stroke="#f9a825"/>
+  <text x="330" y="655" text-anchor="middle" font-size="12">VPC Flow Logs → CloudWatch Logs</text>
+  <rect x="500" y="636" width="260" height="28" rx="4" fill="#ffffff" stroke="#f9a825"/>
+  <text x="630" y="655" text-anchor="middle" font-size="12">CloudTrail → private encrypted S3</text>
+</svg>
